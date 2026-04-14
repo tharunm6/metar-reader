@@ -59,6 +59,21 @@ Enter a 3- or 4-letter airport code and press **Get Weather**.
 
 US airports typically use a `K` prefix followed by the 3-letter IATA code (e.g. `KHIO` for Hillsboro, OR).
 
+## Testing
+
+The project has 78 tests split across two files, covering both the decoding logic and the Flask routes.
+
+```bash
+pytest
+```
+
+| File | Tests | What it covers |
+|------|-------|----------------|
+| `tests/test_parser.py` | 49 | METAR decoding: wind, visibility, clouds, weather phenomena, temperature, altimeter, RMK termination, summary sentence |
+| `tests/test_app.py` | 29 | Flask routes: GET/POST, input validation, rendered HTML output, error handling, `sky_class`/`sky_icon` helpers |
+
+Route tests use `unittest.mock.patch` to replace the live API call with mock METAR strings — no network access required. The suite runs in under a second.
+
 ## Project Structure
 
 ```
@@ -68,8 +83,11 @@ metar-reader/
 ├── requirements.txt    # Python dependencies
 ├── templates/
 │   └── index.html      # Jinja2 template
-└── static/
-    └── style.css       # Stylesheet
+├── static/
+│   └── style.css       # Stylesheet
+└── tests/
+    ├── test_parser.py  # Unit tests for metar_parser.py
+    └── test_app.py     # Integration tests for Flask routes
 ```
 
 ## Data Source

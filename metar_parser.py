@@ -306,11 +306,17 @@ def parse_metar(raw: str) -> dict:
 
         # ── Present weather ────────────────────────────────────────────────────
         # Must come after cloud/temp/alt checks to avoid false positives.
-        # Two sub-patterns: TS alone/with phenomena, or other descriptor + phenomena.
+        # Three sub-patterns:
+        #   1. TS alone or with phenomena  (TSRA, TS, +TSRA …)
+        #   2. Descriptor alone or with phenomena  (VCSH, SHRA, FZFG …)
+        #      — descriptor-only is valid when VC-prefixed (e.g. VCSH)
+        #   3. Bare phenomena with no descriptor  (RA, FG, BR …)
+        _PHENOM = r"(DZ|RA|SN|SG|IC|PL|GR|GS|UP|BR|FG|FU|VA|DU|SA|HZ|PY|SQ|FC|SS|DS|PO)"
         wx_m = re.fullmatch(
             r"[-+]?(VC)?"
-            r"(?:(TS)(DZ|RA|SN|SG|IC|PL|GR|GS|UP|BR|FG|FU|VA|DU|SA|HZ|PY|SQ|FC|SS|DS|PO)*"
-            r"|(MI|PR|BC|DR|BL|SH|FZ)?(DZ|RA|SN|SG|IC|PL|GR|GS|UP|BR|FG|FU|VA|DU|SA|HZ|PY|SQ|FC|SS|DS|PO)+)",
+            r"(?:(TS)" + _PHENOM + r"*"
+            r"|(MI|PR|BC|DR|BL|SH|FZ)" + _PHENOM + r"*"
+            r"|" + _PHENOM + r"+)",
             token,
         )
         if wx_m:
