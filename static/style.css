@@ -1,0 +1,306 @@
+/* ── Reset & base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --sky-blue:   #1a6eb5;
+  --sky-light:  #e8f4fd;
+  --accent:     #0f4c8a;
+  --card-bg:    #ffffff;
+  --text:       #1c2b3a;
+  --muted:      #637282;
+  --border:     #d4e3f0;
+  --success:    #1a7a4a;
+  --error-bg:   #fff3f3;
+  --error-text: #c0392b;
+  --error-bdr:  #f5c6c6;
+  --radius:     12px;
+  --shadow:     0 4px 24px rgba(0,0,0,.10);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: linear-gradient(160deg, #e8f4fd 0%, #dceefb 40%, #cfe5f7 100%);
+  min-height: 100vh;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+.site-header {
+  background: linear-gradient(135deg, var(--sky-blue) 0%, var(--accent) 100%);
+  color: #fff;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,.15);
+}
+.header-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.logo-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.2));
+}
+.site-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -.5px;
+}
+.tagline {
+  font-size: .95rem;
+  opacity: .85;
+  margin-top: .1rem;
+}
+
+/* ── Main container ───────────────────────────────────────────────────────── */
+.container {
+  max-width: 760px;
+  margin: 2.5rem auto;
+  padding: 0 1rem;
+}
+
+/* ── Search form ──────────────────────────────────────────────────────────── */
+.search-form {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+}
+.input-row {
+  display: flex;
+  gap: .75rem;
+}
+.airport-input {
+  flex: 1;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: .65rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color .2s;
+  color: var(--text);
+}
+.airport-input:focus {
+  border-color: var(--sky-blue);
+  box-shadow: 0 0 0 3px rgba(26, 110, 181, .15);
+}
+.search-btn {
+  background: var(--sky-blue);
+  color: #fff;
+  border: none;
+  padding: .65rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .2s, transform .1s;
+  white-space: nowrap;
+}
+.search-btn:hover  { background: var(--accent); }
+.search-btn:active { transform: scale(.97); }
+.hint {
+  margin-top: .6rem;
+  font-size: .82rem;
+  color: var(--muted);
+}
+
+/* ── Alert ────────────────────────────────────────────────────────────────── */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+  font-size: .95rem;
+}
+.alert-error {
+  background: var(--error-bg);
+  color: var(--error-text);
+  border: 1px solid var(--error-bdr);
+}
+.alert-icon { font-size: 1.2rem; }
+
+/* ── Weather card ─────────────────────────────────────────────────────────── */
+.weather-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  animation: fadeUp .35s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.75rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(to right, #f5faff, #edf5fc);
+}
+.station-name {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: .05em;
+}
+.obs-time {
+  font-size: .85rem;
+  color: var(--muted);
+  margin-top: .15rem;
+}
+.sky-badge {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+/* Sky badge colour tints (unused for emoji, but hooks for future icon swaps) */
+.sky-clear   { filter: drop-shadow(0 2px 4px rgba(255,200,0,.4)); }
+.sky-few     { filter: drop-shadow(0 2px 4px rgba(255,160,0,.3)); }
+.sky-scattered { filter: drop-shadow(0 2px 4px rgba(100,150,200,.3)); }
+.sky-broken  { filter: drop-shadow(0 2px 4px rgba(80,100,130,.3)); }
+.sky-overcast{ filter: drop-shadow(0 2px 4px rgba(60,80,100,.3)); }
+
+/* ── Summary box ──────────────────────────────────────────────────────────── */
+.summary-box {
+  background: linear-gradient(135deg, #1a6eb5 0%, #0f4c8a 100%);
+  padding: 1.25rem 1.75rem;
+}
+.summary-text {
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* ── Detail grid ──────────────────────────────────────────────────────────── */
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+}
+.detail-card {
+  background: var(--card-bg);
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  transition: background .15s;
+}
+.detail-card:hover { background: #f5faff; }
+.detail-card--wide {
+  grid-column: span 2;
+}
+.detail-icon  { font-size: 1.4rem; }
+.detail-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+.detail-value { font-size: 1rem; font-weight: 600; color: var(--text); }
+
+/* ── Cloud layers ─────────────────────────────────────────────────────────── */
+.clouds-section {
+  padding: 1.25rem 1.75rem;
+  border-top: 1px solid var(--border);
+}
+.section-heading {
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: .75rem;
+}
+.cloud-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+}
+.cloud-item {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  font-size: .95rem;
+}
+.cloud-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--sky-blue);
+  flex-shrink: 0;
+}
+
+/* ── Raw METAR ────────────────────────────────────────────────────────────── */
+.raw-section {
+  border-top: 1px solid var(--border);
+  padding: 0 1.75rem;
+}
+.raw-toggle {
+  padding: .9rem 0;
+  font-size: .82rem;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+.raw-toggle::before { content: "▶"; font-size: .65rem; transition: transform .2s; }
+details[open] .raw-toggle::before { transform: rotate(90deg); }
+.raw-code {
+  display: block;
+  padding: .85rem 1rem;
+  margin-bottom: 1rem;
+  background: #f4f7fa;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  font-size: .85rem;
+  color: var(--accent);
+  word-break: break-all;
+  line-height: 1.7;
+}
+
+/* ── Landing hint ─────────────────────────────────────────────────────────── */
+.landing-hint {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--muted);
+}
+.landing-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+.landing-hint p { font-size: 1rem; margin-bottom: .5rem; max-width: 480px; margin-inline: auto; }
+.landing-examples { font-size: .95rem; margin-top: .75rem; color: var(--sky-blue); }
+
+/* ── Footer ───────────────────────────────────────────────────────────────── */
+.site-footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: .82rem;
+  color: var(--muted);
+}
+.site-footer a { color: var(--sky-blue); text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; }
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .input-row { flex-direction: column; }
+  .search-btn { width: 100%; }
+  .detail-card--wide { grid-column: span 1; }
+  .station-name { font-size: 1.5rem; }
+  .summary-text { font-size: 1rem; }
+}

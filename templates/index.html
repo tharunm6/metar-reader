@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>METAR Reader — Plain English Weather</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <span class="logo-icon">&#9992;</span>
+      <div>
+        <h1>METAR Reader</h1>
+        <p class="tagline">Type in an airport code. Get plain-English weather.</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Search form -->
+    <form class="search-form" method="POST" action="/">
+      <div class="input-row">
+        <input
+          type="text"
+          name="airport_code"
+          id="airport_code"
+          class="airport-input"
+          placeholder="e.g. KHIO, KJFK, KSFO"
+          value="{{ airport_code }}"
+          maxlength="4"
+          autocomplete="off"
+          autocapitalize="characters"
+          spellcheck="false"
+          autofocus
+        />
+        <button type="submit" class="search-btn">Get Weather</button>
+      </div>
+      <p class="hint">Use ICAO codes (4 letters) for best results. US airports typically prefix with K.</p>
+    </form>
+
+    <!-- Error message -->
+    {% if error %}
+    <div class="alert alert-error" role="alert">
+      <span class="alert-icon">&#9888;</span>
+      {{ error }}
+    </div>
+    {% endif %}
+
+    <!-- Weather result -->
+    {% if weather %}
+    <section class="weather-card">
+
+      <!-- Header -->
+      <div class="card-header">
+        <div>
+          <h2 class="station-name">{{ weather.station }}</h2>
+          <p class="obs-time">Observed: {{ weather.time }}</p>
+        </div>
+        <div class="sky-badge {{ sky_class(weather.clouds) }}">
+          {{ sky_icon(weather.clouds) }}
+        </div>
+      </div>
+
+      <!-- Plain-English summary -->
+      <div class="summary-box">
+        <p class="summary-text">{{ weather.summary }}</p>
+      </div>
+
+      <!-- Detail grid -->
+      <div class="detail-grid">
+
+        {% if weather.temperature %}
+        <div class="detail-card">
+          <div class="detail-icon">&#127777;</div>
+          <div class="detail-label">Temperature</div>
+          <div class="detail-value">{{ weather.temperature }}</div>
+        </div>
+        {% endif %}
+
+        {% if weather.dewpoint %}
+        <div class="detail-card">
+          <div class="detail-icon">&#128167;</div>
+          <div class="detail-label">Dew Point</div>
+          <div class="detail-value">{{ weather.dewpoint }}</div>
+        </div>
+        {% endif %}
+
+        {% if weather.wind %}
+        <div class="detail-card">
+          <div class="detail-icon">&#127788;</div>
+          <div class="detail-label">Wind</div>
+          <div class="detail-value">{{ weather.wind }}</div>
+        </div>
+        {% endif %}
+
+        {% if weather.visibility %}
+        <div class="detail-card">
+          <div class="detail-icon">&#128065;</div>
+          <div class="detail-label">Visibility</div>
+          <div class="detail-value">{{ weather.visibility }}</div>
+        </div>
+        {% endif %}
+
+        {% if weather.altimeter %}
+        <div class="detail-card">
+          <div class="detail-icon">&#127991;</div>
+          <div class="detail-label">Altimeter</div>
+          <div class="detail-value">{{ weather.altimeter }}</div>
+        </div>
+        {% endif %}
+
+        {% if weather.weather %}
+        <div class="detail-card detail-card--wide">
+          <div class="detail-icon">&#9928;</div>
+          <div class="detail-label">Conditions</div>
+          <div class="detail-value">{{ weather.weather | join(', ') | capitalize }}</div>
+        </div>
+        {% endif %}
+
+      </div>
+
+      <!-- Cloud layers -->
+      {% if weather.clouds %}
+      <div class="clouds-section">
+        <h3 class="section-heading">Sky Conditions</h3>
+        <ul class="cloud-list">
+          {% for layer in weather.clouds %}
+          <li class="cloud-item">
+            <span class="cloud-dot"></span>
+            {{ layer | capitalize }}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      <!-- Raw METAR -->
+      <details class="raw-section">
+        <summary class="raw-toggle">Raw METAR</summary>
+        <code class="raw-code">{{ weather.raw }}</code>
+      </details>
+
+    </section>
+    {% endif %}
+
+    <!-- Landing state -->
+    {% if not weather and not error %}
+    <div class="landing-hint">
+      <div class="landing-icon">&#127760;</div>
+      <p>Enter any airport's ICAO code above to get the latest weather report decoded into plain English.</p>
+      <p class="landing-examples">Try: <strong>KHIO</strong> &nbsp;·&nbsp; <strong>KJFK</strong> &nbsp;·&nbsp; <strong>KSFO</strong> &nbsp;·&nbsp; <strong>EGLL</strong> &nbsp;·&nbsp; <strong>RJTT</strong></p>
+    </div>
+    {% endif %}
+
+  </main>
+
+  <footer class="site-footer">
+    Data sourced from <a href="https://aviationweather.gov" target="_blank" rel="noopener">aviationweather.gov</a>
+  </footer>
+
+</body>
+</html>
